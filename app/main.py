@@ -50,7 +50,7 @@ def previous_hour_window() -> tuple[dt.datetime, dt.datetime]:
 
 
 def seconds_until_next_run() -> float:
-    """Segundos até HH:05 da próxima hora (UTC-3)."""
+    """Segundos até HH:00 da próxima hora (UTC-3)."""
     now      = dt.datetime.now(UTC_MINUS_3)
     next_run = now.replace(minute=RUN_OFFSET_MIN, second=0, microsecond=0)
     if next_run <= now:

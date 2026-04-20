@@ -12,7 +12,7 @@ from app.services.mitsat_helpers import build_payload
 logger = logging.getLogger("epm-mitsat")
 
 _MAX_RETRIES  = 3
-_RETRY_DELAYS = [5, 15, 45]   # segundos entre tentativas
+_RETRY_DELAYS = [5, 15, 45] 
 
 
 class MitsatClient:
@@ -23,8 +23,6 @@ class MitsatClient:
         self.key_secret = JUR_SECRET_KEY
         self._token        = None
         self._token_expiry = None
-
-    # ── Autenticação ──────────────────────────────────────────────────────────
 
     def _authenticate(self) -> bool:
         url     = f"{self.base_url}/client/login-key"
@@ -53,9 +51,7 @@ class MitsatClient:
             if datetime.now(timezone.utc).timestamp() < self._token_expiry:
                 return True
         return self._authenticate()
-
-    # ── HTTP com retry ────────────────────────────────────────────────────────
-
+    
     def _do_post(self, url: str, headers: dict, payload: dict) -> requests.Response:
         """POST com retry em falhas de conexão."""
         last_exc = None
@@ -81,8 +77,6 @@ class MitsatClient:
                     logger.warning(f"GET tentativa {attempt}/{_MAX_RETRIES} falhou ({e}). Aguardando {delay}s...")
                     time.sleep(delay)
         raise last_exc
-
-    # ── Requisições autenticadas ──────────────────────────────────────────────
 
     def _authorized_post(self, url: str, payload: dict) -> Optional[requests.Response]:
         if not self._ensure_authenticated():
@@ -131,8 +125,6 @@ class MitsatClient:
 
         response.raise_for_status()
         return response
-
-    # ── API pública ───────────────────────────────────────────────────────────
 
     def post_data(self, station_id: int, readings: list, chunk_size: int = 500) -> bool:
         """

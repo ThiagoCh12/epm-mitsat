@@ -18,15 +18,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from app.clients.epm_client import EpmClient
 from app.clients.mitsat_client import MitsatClient
-from app.config import STATIONS, EPM_VARIABLE
-
-# ── Constantes ────────────────────────────────────────────────────────────────
-
-VAZAO_TYPE     = 3
-UTC_MINUS_3    = dt.timezone(dt.timedelta(hours=-3))
-RUN_OFFSET_MIN = 0   # minutos após a virada da hora para garantir que o EPM finalizou
-
-# ── Logging ───────────────────────────────────────────────────────────────────
+from app.config import STATIONS, EPM_VARIABLE, RUN_OFFSET_MIN, UTC_MINUS_3, VAZAO_TYPE
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -35,7 +27,6 @@ _fmt = logging.Formatter("%(asctime)s [%(levelname)-8s] %(message)s", datefmt="%
 logger = logging.getLogger("epm-mitsat")
 logger.setLevel(logging.INFO)
 
-# Arquivo — rotação diária, retém 30 dias
 _fh = TimedRotatingFileHandler(
     os.path.join(LOG_DIR, "epm_mitsat.log"),
     when="midnight", interval=1, backupCount=30, encoding="utf-8"
@@ -43,12 +34,9 @@ _fh = TimedRotatingFileHandler(
 _fh.setFormatter(_fmt)
 logger.addHandler(_fh)
 
-# Console
 _ch = logging.StreamHandler()
 _ch.setFormatter(_fmt)
 logger.addHandler(_ch)
-
-# ── Lógica de ciclo ───────────────────────────────────────────────────────────
 
 def previous_hour_window() -> tuple[dt.datetime, dt.datetime]:
     """Retorna (inicio, fim) da hora anterior completa em UTC.
@@ -119,9 +107,6 @@ def run_cycle() -> None:
             logger.error(f"[{station['id']}] Erro inesperado: {e}", exc_info=True)
 
     logger.info("Ciclo finalizado.")
-
-
-# ── Entrypoint ────────────────────────────────────────────────────────────────
 
 def main() -> None:
     logger.info("EPM→MITSAT iniciado.")

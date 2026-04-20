@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import os
+import os, datetime as dt
 
 load_dotenv()
 
@@ -22,3 +22,7 @@ STATIONS = {
         "company": "UHE Juruena S.A",
     }
 }
+
+VAZAO_TYPE     = 3
+UTC_MINUS_3    = dt.timezone(dt.timedelta(hours=-3))
+RUN_OFFSET_MIN = 0   # minutos após a virada da hora para garantir que o EPM finalizou

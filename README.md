@@ -5,7 +5,15 @@ Serviço de sincronização horária de vazão de defluência entre o **Elipse E
 A cada hora, o serviço lê o valor mais recente da variável configurada no EPM e o envia para a MITSAT com o timestamp `HH:00:00 UTC-3`.
 
 ---
+## 🎯 Contexto e Impacto
 
+Este serviço foi desenvolvido para resolver um problema real da 
+**UHE Juruena** — os dados de vazão de defluência precisavam ser 
+reportados à **ANA (Agência Nacional de Águas e Saneamento Básico)** 
+via plataforma MITSAT, mas a integração automática não existia.
+
+O serviço opera 24/7 em produção no servidor da usina, garantindo 
+o envio horário dos dados hidrológicos críticos sem intervenção manual.
 ## Requisitos
 
 - Python 3.11+

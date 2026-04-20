@@ -1,6 +1,8 @@
 """
-Simulação do main.py sem leitura do EPM.
-Acorda a cada HH:00 e envia um valor fixo para todas as estações.
+Utilitários de teste — execute com um argumento:
+
+  python app/test_run.py epm      → lê a variável do EPM e exibe o último valor
+  python app/test_run.py mitsat   → simula o ciclo completo enviando valor fixo à MITSAT
 """
 import sys
 import os
@@ -9,7 +11,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import datetime as dt
 import time
 
-from app.main import logger, VAZAO_TYPE, STATIONS, UTC_MINUS_3
+from app.main import logger, EPM_VARIABLE, VAZAO_TYPE, STATIONS, UTC_MINUS_3
+from app.clients.epm_client import EpmClient
 from app.clients.mitsat_client import MitsatClient
 
 TEST_VALUE   = 42.00
@@ -53,5 +56,36 @@ def main() -> None:
         run_cycle()
 
 
+def test_epm() -> None:
+    """Lê a variável do EPM e exibe o último valor da hora anterior."""
+    now    = dt.datetime.now(dt.timezone.utc)
+    fim    = now.replace(minute=0, second=0, microsecond=0)
+    inicio = fim - dt.timedelta(hours=1)
+
+    logger.info(f"[EPM] Lendo '{EPM_VARIABLE}' de {inicio} a {fim}")
+
+    try:
+        epm = EpmClient()
+        data = epm.read_bv(EPM_VARIABLE, inicio, fim)
+    except Exception as e:
+        logger.error(f"[EPM] Falha: {e}")
+        return
+
+    if data is None or len(data) == 0:
+        logger.warning("[EPM] Nenhum dado retornado para o período.")
+        return
+
+    last = data[-1]
+    logger.info(f"[EPM] {len(data)} registros lidos.")
+    logger.info(f"[EPM] Último valor: {float(last['Value'])} m³/s em {last['Timestamp']}")
+
+
 if __name__ == "__main__":
-    main()
+    mode = sys.argv[1] if len(sys.argv) > 1 else "mitsat"
+
+    if mode == "epm":
+        test_epm()
+    elif mode == "mitsat":
+        main()
+    else:
+        print("Uso: python app/test_run.py [epm|mitsat]")

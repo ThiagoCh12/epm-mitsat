@@ -1,7 +1,7 @@
 """
 EPM → MITSAT  |  Sincronização horária de vazão de defluência.
 
-Roda continuamente, executando um ciclo a cada hora (HH:05 UTC-3).
+Roda continuamente, executando um ciclo a cada hora (HH:00 UTC-3).
 A cada ciclo lê a hora anterior do EPM e envia para a MITSAT.
 """
 
@@ -18,14 +18,13 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from app.clients.epm_client import EpmClient
 from app.clients.mitsat_client import MitsatClient
-from app.config import STATIONS
+from app.config import STATIONS, EPM_VARIABLE
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 
-EPM_VARIABLE   = "JUR_TA_Med_VazDefl"
 VAZAO_TYPE     = 3
 UTC_MINUS_3    = dt.timezone(dt.timedelta(hours=-3))
-RUN_OFFSET_MIN = 5   # minutos após a virada da hora para garantir que o EPM finalizou
+RUN_OFFSET_MIN = 0   # minutos após a virada da hora para garantir que o EPM finalizou
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 

@@ -45,6 +45,7 @@ EPM_AUTH=https://localhost:44333
 EPM_API=https://localhost:44332
 EPM_USER=sa
 EPM_PASSWORD=senha
+EPM_VARIABLE=JUR.TA.Med.VazDefl
 
 # MITSAT
 MITSAT_BASE_URL=https://prod.mitsat.com.br/api
@@ -176,7 +177,7 @@ EPM-MITSAT/
 │   │   └── mitsat_helpers.py   # Formatação de payload
 │   ├── config.py               # Carregamento do .env
 │   ├── main.py                 # Serviço principal (produção)
-│   ├── test_run.py             # Simulação sem EPM
+│   ├── test_run.py             # Simulação leitura EPM e envio MITSAT
 ├── logs/                       # Logs rotativos (criado automaticamente)
 ├── .env                        # Credenciais (não versionar)
 ├── requirements.txt

@@ -12,6 +12,8 @@ MITSAT_BASE_URL = os.getenv("MITSAT_BASE_URL")
 JUR_API_KEY     = os.getenv("JUR_API_KEY")
 JUR_SECRET_KEY  = os.getenv("JUR_SECRET_KEY")
 
+EPM_VARIABLE = os.getenv("EPM_VARIABLE")
+
 STATIONS = {
     315: {
         "id": 315,

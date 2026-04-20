@@ -63,7 +63,7 @@ JUR_SECRET_KEY=sua_key_secret
 python app/main.py
 ```
 
-O serviço acorda em `HH:05` de cada hora, lê o EPM da hora anterior e envia para a MITSAT.
+O serviço acorda em `HH:00` de cada hora, lê o EPM da hora anterior e envia para a MITSAT.
 
 ### Simulação sem EPM
 
@@ -176,10 +176,10 @@ EPM-MITSAT/
 │   ├── services/
 │   │   └── mitsat_helpers.py   # Formatação de payload
 │   ├── config.py               # Carregamento do .env
-│   ├── main.py                 # Serviço principal (produção)
+│   ├── main.py                 # Serviço principal 
 │   ├── test_run.py             # Simulação leitura EPM e envio MITSAT
 ├── logs/                       # Logs rotativos (criado automaticamente)
-├── .env                        # Credenciais (não versionar)
+├── .env                        # Credenciais 
 ├── requirements.txt
 └── README.md
 ```
